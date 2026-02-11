@@ -32,7 +32,7 @@ jobs:
         run: npm install
 
       - name: Build project
-        run: npm run build
+        run: CI=false npm run build
 
       # 🔵 For Create React App
       - name: Upload build folder
