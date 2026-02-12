@@ -4,14 +4,12 @@ import { ButtonType } from "../components/Button";
 import { useNavigate } from "react-router-dom";
 
 import { useState } from "react";
-import axios from "axios";
 
 import { useDispatch } from "react-redux";
 import { login } from "../store/store";
+import api from "../api/client";
 
 export const Login = () => {
-    
-    const BASE_URL = "http://127.0.0.1:5000/api/auth"
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -42,7 +40,7 @@ export const Login = () => {
 
         try {
             console.log(123)
-            const response = await axios.post(`${BASE_URL}/login`, formData, { withCredentials: true });
+            const response = await api.post("/api/auth/login", formData);
             const data = response.data
             console.log(response.data)
             localStorage.clear()
@@ -76,7 +74,7 @@ export const Login = () => {
     };
 
     return (
-        <main>
+        <main className="standalone-main">
             <section className="login standalone">
                 <div className="greeting">
                     <h1>Login</h1>
