@@ -6,8 +6,6 @@ from app.models.company import Company
 
 from flask import Blueprint, jsonify, request
 
-from app.routes.products import get_low_stock_count, get_total_count
-from app.routes.categories import get_categories_count
 from app.routes.logs import add_log
 
 from app.utils.fail import fail
@@ -15,7 +13,7 @@ from app.utils.ok import ok
 from app.utils.validate_user import validate_user
 from decimal import Decimal
 
-from sqlalchemy import func, and_, Numeric, cast
+from sqlalchemy import func, Numeric, cast
 
 from datetime import datetime, timedelta, timezone
 
@@ -105,43 +103,6 @@ def get_recent_sales_route():
     recent_Sales = get_recent_sales(company_reg_no)
 
     return jsonify(recent_Sales)
-
-@sale_bp.route("/get-report", methods=["POST"])
-def get_report():
-    payload = request.get_json()
-
-    company_reg_no = payload.get("company_reg_no")
-    recent_Sales = get_recent_sales(company_reg_no)
-
-    low_stock = get_low_stock_count(company_reg_no)
-
-    total_Count = get_total_count(company_reg_no)
-
-    categories_count = get_categories_count(company_reg_no)
-
-
-
-
-@sale_bp.route("", methods=["GET"])
-def get_all():
-    saleItems = Sale_item.query.all()
-
-    data = [
-        {
-            "id": s.id,
-            "sale_id": s.sale_id,
-            "product_id": s.product_id,
-            "quantity": s.quantity,
-            "price": s.sale_price,
-            "status": s.status
-        }
-        for s in saleItems
-    ]
-
-    return jsonify({
-        "success": True,
-        "data": data
-    })
 
 @sale_bp.route("get-best-seller", methods=["POST"])
 def get_best_seller_route():

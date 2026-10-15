@@ -3,6 +3,9 @@ from app import db
 class Log(db.Model):
 
     __tablename__ = "log"
+
+    # Log table having columns id, time, user_id, action, message, info and company_reg_no
+
     id = db.Column(
         db.Integer,
         autoincrement=True,
@@ -33,5 +36,7 @@ class Log(db.Model):
         db.JSON, 
         nullable=True
     ) 
+
+    # Relationships
     user = db.relationship("User", foreign_keys=[user_id], backref="logs")
     company = db.relationship("Company", foreign_keys=[company_reg_no], backref="logs")

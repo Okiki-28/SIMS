@@ -12,6 +12,9 @@ def generate_salt_hex(self):
 class User(db.Model):
 
     __tablename__ = "user"
+
+    # User table having columns id, first_name, last_name, email, tel, password_hash, salt_hex, role, created_at, company_reg_no
+    # security_question security_response_hex and security_response_salt_hex
     
     id = db.Column(
         db.Integer,
@@ -71,4 +74,5 @@ class User(db.Model):
         nullable = False
     )
 
+    # Relationships
     company = db.relationship("Company", foreign_keys=[company_reg_no], backref="users")

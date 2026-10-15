@@ -330,7 +330,8 @@ export const Inventory = () => {
                 <Button className={lowStockOnly ? "red": ""} onclick={toggleLowStock}>Low Stock</Button>
                 </div>
             </section>
-            <section className="product-grid">
+            {filteredProducts.length != 0? 
+            (<section className="product-grid">
                 <table>
                     <thead>
                         <tr>
@@ -364,7 +365,7 @@ export const Inventory = () => {
                         ))}
                     </tbody>
                 </table>
-            </section>
+            </section>) : (<p className="empty-grid-text">Inventory is Empty</p>)}
         </main>
         </>
     )

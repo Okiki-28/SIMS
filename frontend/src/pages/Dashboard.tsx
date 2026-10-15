@@ -1,9 +1,6 @@
-import { useSelector } from "react-redux"
-import { Button } from "../components/Button"
 import { useDispatch } from "react-redux"
 import { setHeading } from "../store/store"
 import { useEffect, useState } from "react"
-import { error } from "console"
 import { useNavigate } from "react-router-dom"
 import { useMemo } from "react"
 
@@ -40,6 +37,11 @@ export const Dashboard = () => {
         const savedUser = localStorage.getItem("user");
         return savedUser ? JSON.parse(savedUser).user_id : "";
     }, []);
+    useEffect(() => {
+        if (company_reg_no === "") {
+            navigate("/")
+        }
+    }, [company_reg_no, navigate])
     useEffect(()=> {
         const getProductCount = async () => {
             const payload = {

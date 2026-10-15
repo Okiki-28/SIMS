@@ -1,13 +1,12 @@
 from app import db
 
-from flask import Blueprint, jsonify, request, session
+from flask import Blueprint, request
 from app.models.user import User
 from app.models.company import Company
 
 from app.utils.hash_password import hash_password
 from app.utils.hash_security_response import hash_security_response
 from app.utils.company_reg_no_generator import generate_Company_reg_no
-from app.utils.ok import ok
 from app.utils.fail import fail
 
 from app.routes.logs import add_log
@@ -16,12 +15,6 @@ import os
 import hmac
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/api/auth")
-
-@auth_bp.route("", methods=["GET"])
-def hello():
-    return jsonify({
-        "success": True
-    })
 
 @auth_bp.route("/register-new", methods=["POST"])
 def register_new():
@@ -41,8 +34,8 @@ def register_new():
 
     security_question = data.get("security_question")
     security_response = data.get("security_response")
-
     
+    # Validatio 
     if not all([company_name, user_first_name, user_last_name, user_email, user_password, user_confirm_password, security_question, security_response]):
         return fail(details="Complete all required fields in form")
     elif not user_password == user_confirm_password:
@@ -52,8 +45,6 @@ def register_new():
     
     if Company.query.filter_by(name = company_name).first():
         return fail(details="Company name already exists")
-    #Add okay and fail helper function
-
 
     company = Company(
         reg_no = generate_Company_reg_no(company_name),
@@ -67,7 +58,7 @@ def register_new():
     db.session.add(company)
     db.session.flush()
     
-
+    # Getting salt
     salt = os.urandom(16)
     salt_hex = salt.hex()
     password_hash = hash_password(user_password, salt)
@@ -76,6 +67,7 @@ def register_new():
     security_salt_hex = security_salt.hex()
     security_response_hex = hash_security_response(security_response, security_salt)
     
+    # Validation
     if User.query.filter_by(email = user_email).first():
         return fail(details="Email already exists in database")
 
@@ -147,6 +139,7 @@ def register_existing():
     security_question = data.get("security_question")
     security_response = data.get("security_response")
 
+    # Validation
     if not all([company_reg_no, user_first_name, user_role, user_last_name, user_email, user_password, user_confirm_password, security_question, security_response]):
         return fail(details="Complete all required fields in form")
     elif not user_password == user_confirm_password:
@@ -184,10 +177,6 @@ def register_existing():
     db.session.add(user)
     db.session.commit()
 
-    session['user_id'] = user.id
-    session['first_name'] = user.first_name
-    session['company_reg_no'] = user.company_reg_no
-
     data = {
         'user_id': user.id,
         'username': user.first_name,
@@ -220,6 +209,7 @@ def login():
     email = data.get("email").lower()
     password = data.get("password")
 
+    # Validation
     if not email or not password:
         return fail(details="Fill in all fields")
     user = User.query.filter_by(email = email).first()
@@ -231,10 +221,6 @@ def login():
 
     if not hmac.compare_digest(calculated_hash, user.password_hash):
         return fail(details="Invalid email or password")
-    
-    session.clear()
-    session['user_id'] = user.id
-    session['first_name'] = user.first_name
 
     data = {
         'user_id': user.id,
@@ -319,12 +305,3 @@ def get_Security_question():
     }
 
     return data
-
-@auth_bp.route("/status", methods=["GET"])
-def status():
-    
-    return {
-        "loggedIn": 'user_id' in session,
-        "user_id": session.get('user_id'),
-        "first_name": session.get('first_name')
-    }

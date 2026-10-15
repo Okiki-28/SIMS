@@ -1,7 +1,4 @@
 from app import db
-from app.models.user import User
-from app.models.company import Company
-from app.models.product import Product
 from app.models.supplier import Supplier
 from flask import Blueprint, jsonify, request
 

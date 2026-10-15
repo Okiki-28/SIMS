@@ -6,6 +6,8 @@ class Sale_item(db.Model):
 
     __tablename__ = "sale_item"
 
+    # Sale_item table having columns id, sale_id, product_id, quantity, sale_price and status
+
     id = db.Column(
         db.Integer,
         primary_key=True
@@ -31,11 +33,11 @@ class Sale_item(db.Model):
     )
 
     def profit(self):
-        # Profit from a single sale item: (sale_price - unit_price) * quantity
         product = Product.query.get(self.product_id)
         if not product:
             return 0
         return float((self.sale_price - product.unit_price) * self.quantity)
 
+    # Relationships
     sale = db.relationship("Sale", foreign_keys=[sale_id], backref="sale_items")
     product = db.relationship("Product", foreign_keys=[product_id], backref="sale_items")

@@ -60,11 +60,11 @@ export const Login = () => {
             console.log("Login error:", err?.response?.status);
             console.log("Error details:", err?.response?.data);
             
-            // Set user-friendly error message
+            // Usser-friendly error message
             if (err?.response?.status === 401) {
                 setError("Invalid email or password")
             } else if (err?.response?.data) {
-                setError(err.response.details)
+                setError(err.response.data.details)
             } else {
                 setError("Login failed. Please try again.")
             }

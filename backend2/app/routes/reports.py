@@ -1,5 +1,4 @@
 from app import db
-from app.models.user import User
 from app.models.company import Company
 from app.models.product import Product
 from app.models.supplier import Supplier
@@ -8,13 +7,11 @@ from app.models.sale import Sale
 from app.models.sale_item import Sale_item
 from flask import Blueprint, jsonify, request
 
-from app.utils.ok import ok
 from app.utils.fail import fail
 from app.utils.validate_user import validate_user
 
-from app.routes.logs import add_log
 
-from sqlalchemy import func, case
+from sqlalchemy import func
 
 report_bp = Blueprint("report", __name__, url_prefix="/api/reports")
 

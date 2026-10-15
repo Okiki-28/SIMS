@@ -1,6 +1,4 @@
 from app import db
-from app.models.user import User
-from app.models.company import Company
 from app.models.product import Product
 from app.models.supplier import Supplier
 from app.models.category import Category
@@ -9,7 +7,6 @@ from flask import Blueprint, jsonify, request
 from app.utils.fail import fail
 from app.utils.ok import ok
 from app.utils.check_product_status import checkProductStatus
-from app.utils.low_stock import isLowStock, isAlmostLowStock
 from app.utils.validate_user import validate_user
 
 from app.routes.categories import get_categories_count
@@ -123,7 +120,12 @@ def add_product():
         return fail(details="Fill in all fields")
     if int(product_quantity) < 0:
         return fail(details="Quantity cannot be negative")
-
+    if float(product_price) < 0:
+        return fail(details="Price cannot be negative")
+    if float(product_selling_price) < 0:
+        return fail(details="Selling price cannot be negative")
+    if len(product_name) > 40:
+        return fail(details="Product name too long")
 
     product = Product(
         name = product_name,
@@ -145,7 +147,6 @@ def add_product():
     supplier = Supplier.query.filter_by(id=product_supplier_id, company_reg_no=company_reg_no).first()
     if not supplier:
         return fail(details="Invalid supplier referenced")
-    category.number_of_items = (category.number_of_items or 0) + 1
 
     db.session.add(product)
     db.session.commit()
@@ -186,10 +187,6 @@ def delete_product(id):
 
     if not product:
         return fail()
-    
-    
-    product.category.number_of_items -= 1
-
     
     db.session.delete(product)
     db.session.commit()

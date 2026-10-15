@@ -6,6 +6,8 @@ class Company(db.Model):
 
     __tablename__ = "company"
 
+    # Company table having columns id, reg_no, name, address, phone, tax_id, size, threshold, time_period
+
     id = db.Column(
         db.Integer,
         primary_key=True
@@ -40,4 +42,4 @@ class Company(db.Model):
     time_period = db.Column(
         db.Integer,
         default = 30
-    )
+    ) # In days

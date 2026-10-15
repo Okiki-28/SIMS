@@ -1,8 +1,4 @@
 from app import db
-from app.models.user import User
-from app.models.company import Company
-from app.models.product import Product
-from app.models.supplier import Supplier
 from app.models.category import Category
 from flask import Blueprint, jsonify, request
 
@@ -20,8 +16,10 @@ def get_all_categories():
     company_reg_no = data.get("company_reg_no")
     user_id = data.get("user_id")
     
+    # Validation
     if not validate_user(company_reg_no=company_reg_no, user_id=user_id):
         return fail(details="Invalid request from unknown user")
+    
     categories = Category.query.filter_by(company_reg_no=company_reg_no).all()
     data_list = [
         {
@@ -41,6 +39,7 @@ def get_categories_count_route():
     company_reg_no = payload.get("company_reg_no")
     user_id = data.get("user_id")
 
+    # Validation
     if not validate_user(company_reg_no=company_reg_no, user_id=user_id):
         return fail(details="Invalid request from unknown user")
     data = get_categories_count(company_reg_no)
@@ -87,6 +86,7 @@ def delete_category(category_id):
     user_id = data.get("user_id")
     company_reg_no = data.get("company_reg_no")
 
+    # Validation
     if not validate_user(company_reg_no=company_reg_no, user_id=user_id):
         return fail(details="Invalid request from unknown user")
 

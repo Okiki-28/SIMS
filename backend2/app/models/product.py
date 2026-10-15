@@ -3,6 +3,10 @@ from app import db
 class Product(db.Model):
 
     __tablename__ = "product"
+
+    # Product table having columns id, name, description, quantity, unit_price, selling_price, reorder_level
+    # Created_at, category_id, supplier_id
+
     id = db.Column(
         db.Integer,
         autoincrement=True,
@@ -51,7 +55,7 @@ class Product(db.Model):
         nullable=False
     )
 
-    # Fix: Use capitalized class names, not table names
+    # Relationships
     company = db.relationship("Company", foreign_keys=[company_reg_no], backref="products")
     category = db.relationship("Category", foreign_keys=[category_id], backref="products")
     supplier = db.relationship("Supplier", foreign_keys=[supplier_id], backref="products")

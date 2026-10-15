@@ -3,9 +3,14 @@ import React, { useMemo, useState } from "react";
 import { Modal } from "../components/Modal";
 import { useSelector } from "react-redux";
 import api from "../api/client";
+import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom";
+
 
 
 export const Navbar = () => {
+
+    const navigate = useNavigate()
 
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState("")
@@ -50,7 +55,7 @@ export const Navbar = () => {
     }
 
     const handleAddProduct = async (e: React.FormEvent, formData: any) => {
-        // e.preventDefault();
+        
         setError("")
         setIsLoading(true)
         console.log(formData)
@@ -67,17 +72,31 @@ export const Navbar = () => {
             }
             return {"error": err.response.data.details}
         }
+        
     }
+
+    const logout = () => {
+        
+        navigate("/Logout")
+    }
+
     return (
         <>
         <Modal heading={modalHeading} isActive={isActive} isModalForm={isModalForm} data={modalData} handleSubmit={handleAddProduct} onClose={closeModal}  />
         <section className="top-bar">
-            <div className="greeting">
-                <h1>{pageHeading}</h1>
-                <p>Welcome {user}, {message}</p> 
-            </div>
+            <h1>Company Name</h1>
+            <section className="nav-bar">
+                <ul>
+                    <li className={pageHeading == "Dashboard"? "active": ""}><Link to="/dashboard">Dashboard</Link></li>
+                    <li className={pageHeading == "Inventory"? "active": ""}><Link to="/inventory">Inventory</Link></li>
+                    <li className={pageHeading == "Counter Sale"? "active": ""}><Link to="/counter-sale">Counter Sale</Link></li>
+                    <li className={pageHeading == "Reports"? "active": ""}><Link to="/reports">Reports</Link></li>
+                    <li className={pageHeading == "Settings"? "active": ""}><Link to="/settings">Settings</Link></li>
+                </ul>
+            </section>
             <div className="functionality">
                 <Button onclick={addProduct}>Add Products +</Button>
+                <Button onclick={logout}>Logout</Button>
             </div>
         </section>
         </>

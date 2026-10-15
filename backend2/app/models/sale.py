@@ -4,6 +4,8 @@ class Sale(db.Model):
 
     __tablename__ = "sale"
 
+    # Sale table having columns id, user_id, company_reg_no and date
+
     id = db.Column(
         db.Integer,
         primary_key=True

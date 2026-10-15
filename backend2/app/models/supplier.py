@@ -4,6 +4,8 @@ class Supplier(db.Model):
 
     __tablename__ = "supplier"
 
+    # Supplier table having columns id, name, phone, email, address, company_reg_no
+
     id = db.Column(
         db.Integer,
         autoincrement = True,
@@ -28,4 +30,5 @@ class Supplier(db.Model):
         nullable=False
     )
     
+    # Relationships
     company = db.relationship("Company", foreign_keys=[company_reg_no], backref="suppliers")

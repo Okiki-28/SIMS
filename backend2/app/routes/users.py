@@ -12,33 +12,27 @@ from app.routes.logs import add_log
 
 user_bp = Blueprint("user", __name__, url_prefix="/api/users")
 
-@user_bp.route("", methods=["GET"])
-def get_all_users():
+@user_bp.route("/dev-get", methods=["GET"])
+def get_users_dev():
     users = User.query.all()
 
-    data = [
-        {
-            "id": u.id,
-            "first name": u.first_name,
-            "last name": u.last_name,
-            "email": u.email,
-            "tel": u.tel,
-            "role": u.role,
-            "created at": u.created_at,
-            "security question": u.security_question,
-            "security_response_hex": u.security_response_hex,
-            "security_response_salt_hex": u.security_response_salt_hex,
-            "company reg no": u.company_reg_no,
-            "user_password": u.password_hash,
-            "salt": u.salt_hex
-        }
-        for u in users
-    ]
+    data = []
 
-    return jsonify({
-        "success": True,
-        "data": data
-    })
+    for user in users:
+        data.append({
+            "user_id": user.id,
+            "user_first_name": user.first_name,
+            "user_last_name": user.last_name,
+            "user_email": user.email,
+            "user_tel": user.tel,
+            "user_role": user.role,
+            "user_company_reg_no": user.company_reg_no,
+            "user_created_at": user.created_at
+        })
+
+    return data
+    
+
 
 @user_bp.route("", methods=["POST"])
 def get_user():

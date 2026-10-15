@@ -230,7 +230,8 @@ export const CounterSale = () => {
                 </div>
             <Button className="paid-exit" onclick={payAndExit}>PAID, Exit</Button>
             </section>
-            <section className="product-grid added-items">
+            {addedProducts.length == 0? <p className="empty-grid-text">No items in cart yet</p> : 
+            (<section className="product-grid added-items">
                 <table>
                     <thead>
                         <tr>
@@ -258,8 +259,10 @@ export const CounterSale = () => {
                         ))}
                     </tbody>
                 </table>
-            </section>
-            <section className="product-grid">
+            </section>)}
+            <div className="hr"></div>
+            {filteredProducts.length == 0? <p className="empty-grid-text">Nothing to show</p> :
+            (<section className="product-grid">
                 <table>
                     <thead>
                         <tr>
@@ -287,7 +290,7 @@ export const CounterSale = () => {
                         ))}
                     </tbody>
                 </table>
-            </section>
+            </section>)}
         </main>
         </>
     )

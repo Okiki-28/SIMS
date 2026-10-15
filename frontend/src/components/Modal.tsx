@@ -1,8 +1,11 @@
 import { Button, ButtonType } from "./Button"
 import React, { useEffect, useMemo, useState } from "react"
 import api from "../api/client"
+import { useNavigate } from "react-router-dom"
 
 export const Modal = ({heading="Modal", purpose="product", data, isActive, onClose, isModalForm, handleSubmit}: any) => {
+    
+    const navigate = useNavigate()
     
     const [all_suppliers, setAll_suppliers] = useState([{
             "id": -1,
@@ -124,7 +127,7 @@ export const Modal = ({heading="Modal", purpose="product", data, isActive, onClo
     }, [company_reg_no])
 
     const handleProductSummit = async (e: React.FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
         console.log(addProductFormData)
         const response = await handleSubmit(e, addProductFormData)
         if (response?.error) {
@@ -147,6 +150,7 @@ export const Modal = ({heading="Modal", purpose="product", data, isActive, onClo
             "supplier_id": 0
         })
         onClose()
+        navigate(0)
     }
     
     const handleCategorySubmit = (e: React.FormEvent) => {
